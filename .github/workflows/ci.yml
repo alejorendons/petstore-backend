@@ -1,0 +1,57 @@
+﻿name: CI/CD Pipeline
+
+on:
+  push:
+    branches: ["main", "develop"]
+  pull_request:
+    branches: ["main", "develop"]
+
+permissions:
+  contents: read
+  id-token: write
+
+env:
+  JAVA_VERSION: "21"
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Temurin JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: ${{ env.JAVA_VERSION }}
+          cache: "maven"
+
+      - name: Build
+        run: mvn -B -ntp clean compile
+
+      - name: Run unit tests
+        run: mvn -B -ntp test
+
+      - name: Lint & package
+        run: mvn -B -ntp -DskipTests package
+
+      - name: Security scan (OWASP Dependency-Check)
+        run: mvn -B -ntp dependency-check:check
+
+      - name: Build Docker image
+        if: hashFiles('Dockerfile') != ''
+        run: docker build -t ${{ github.repository }}:${{ github.sha }} .
+
+      - name: Validate docker-compose
+        if: hashFiles('docker-compose.yml') != ''
+        run: docker compose -f docker-compose.yml config
+
+      - name: Deploy to Render/Railway/AWS
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        env:
+          RENDER_TOKEN: ${{ secrets.RENDER_TOKEN }}
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: |
+          echo "Implement deployment using platform CLI (Render, Railway, or AWS ECS)."
+          echo "Example: render login --api-key $RENDER_TOKEN && render deploy"
