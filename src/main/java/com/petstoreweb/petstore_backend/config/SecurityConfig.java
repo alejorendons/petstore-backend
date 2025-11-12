@@ -42,6 +42,7 @@ public class SecurityConfig {
                                 "/v3/api-docs/**"
                         ).permitAll()
                         .requestMatchers("/api/inventory/**").hasRole("ADMIN")
+                        .requestMatchers("/api/providers/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 // 3. Añade el filtro ANTES del filtro de autenticación estándar.
