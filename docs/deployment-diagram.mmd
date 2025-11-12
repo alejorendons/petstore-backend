@@ -1,21 +1,21 @@
 flowchart LR
   subgraph User_Device[Client Browser / Mobile App]
-    UI[Frontend SPA\n(React / Static Hosting)]
+    UI[Frontend SPA<br/>(React / Static Hosting)]
   end
 
   subgraph Cloud_Edge[API Gateway Layer]
-    GW[Reverse Proxy / API Gateway\n(Nginx or Spring Cloud Gateway)]
+    GW[Reverse Proxy / API Gateway<br/>(Nginx or Spring Cloud Gateway)]
   end
 
-  subgraph BackendCluster[Application Tier\nSpring Boot Cluster]
-    APP[Petstore Backend\nSpring Boot 3.x\nDocker Container]
-    AUTH[Auth Module\n(JWT Issuer & Session Control)]
-    INVENTORY[Inventory Module\n(Productos, Notificaciones)]
+  subgraph BackendCluster[Application Tier<br/>Spring Boot Cluster]
+    APP[Petstore Backend<br/>Spring Boot 3.x<br/>Docker Container]
+    AUTH[Auth Module<br/>(JWT Issuer & Session Control)]
+    INVENTORY[Inventory Module<br/>(Productos, Notificaciones)]
   end
 
   subgraph DataLayer[Data Tier]
-    DB[(PostgreSQL\nManaged Instance)]
-    Secrets[Secrets Manager\n(Environment Variables)]
+    DB[(PostgreSQL<br/>Managed Instance)]
+    Secrets[Secrets Manager<br/>(Environment Variables)]
   end
 
   subgraph CI_CD[CI/CD Pipeline]
@@ -37,7 +37,7 @@ flowchart LR
   Runner -->|Build Image| Registry
   Registry -->|Pull Image| BackendCluster
 
-  note right of APP: Port 8080\nSpring Security + JWT
-  note bottom of GW: TLS Termination\nCORS / Rate Limit
+  note right of APP: Port 8080<br/>Spring Security + JWT
+  note bottom of GW: TLS Termination<br/>CORS / Rate Limit
   note bottom of Runner: Stages: build → test → package → deploy
 
