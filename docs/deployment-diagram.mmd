@@ -1,29 +1,30 @@
 flowchart LR
-  subgraph User_Device[Client Browser / Mobile App]
-    UI[Frontend SPA<br/>(React / Static Hosting)]
+  subgraph User_Device["Client Browser / Mobile App"]
+    UI["Frontend SPA (React / Static Hosting)"]
   end
 
-  subgraph Cloud_Edge[API Gateway Layer]
-    GW[Reverse Proxy / API Gateway<br/>(Nginx or Spring Cloud Gateway)]
+  subgraph Cloud_Edge["API Gateway Layer"]
+    GW["Reverse Proxy / API Gateway (Nginx or Spring Cloud Gateway)"]
   end
 
-  subgraph BackendCluster[Application Tier<br/>Spring Boot Cluster]
-    APP[Petstore Backend<br/>Spring Boot 3.x<br/>Docker Container]
-    AUTH[Auth Module<br/>(JWT Issuer & Session Control)]
-    INVENTORY[Inventory Module<br/>(Productos, Notificaciones)]
+  subgraph BackendCluster["Application Tier - Spring Boot Cluster"]
+    APP["Petstore Backend (Spring Boot 3.x, Docker Container)"]
+    AUTH["Auth Module (JWT Issuer & Session Control)"]
+    INVENTORY["Inventory Module (Productos, Notificaciones)"]
   end
 
-  subgraph DataLayer[Data Tier]
-    DB[(PostgreSQL<br/>Managed Instance)]
-    Secrets[Secrets Manager<br/>(Environment Variables)]
+  subgraph DataLayer["Data Tier"]
+    DB["PostgreSQL (Managed Instance)"]
+    Secrets["Secrets Manager (Environment Variables)"]
   end
 
-  subgraph CI_CD[CI/CD Pipeline]
-    GH[GitHub Repository]
-    Runner[GitHub Actions Runner]
-    Registry[(Container Registry)]
+  subgraph CI_CD["CI/CD Pipeline"]
+    GH["GitHub Repository"]
+    Runner["GitHub Actions Runner"]
+    Registry["Container Registry"]
   end
 
+  %% Connections
   UI -->|HTTPS| GW
   GW -->|JWT Auth + REST/JSON| APP
   APP --> AUTH
@@ -33,11 +34,11 @@ flowchart LR
   APP -->|Read Secrets| Secrets
 
   GH -->|Push| Runner
-  Runner -->|Build & Test (Maven)| APP
+
+
+
   Runner -->|Build Image| Registry
+
   Registry -->|Pull Image| BackendCluster
 
-  note right of APP: Port 8080<br/>Spring Security + JWT
-  note bottom of GW: TLS Termination<br/>CORS / Rate Limit
-  note bottom of Runner: Stages: build → test → package → deploy
-
+ 
