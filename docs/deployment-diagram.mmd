@@ -1,45 +1,43 @@
-```mermaid
 flowchart LR
-    subgraph User_Device[Client Browser / Mobile App]
-        UI[Frontend SPA\n(React / Static Hosting)]
-    end
+  subgraph User_Device[Client Browser / Mobile App]
+    UI[Frontend SPA\n(React / Static Hosting)]
+  end
 
-    subgraph Cloud_Edge[API Gateway Layer]
-        GW[Reverse Proxy / API Gateway\n(Nginx or Spring Cloud Gateway)]
-    end
+  subgraph Cloud_Edge[API Gateway Layer]
+    GW[Reverse Proxy / API Gateway\n(Nginx or Spring Cloud Gateway)]
+  end
 
-    subgraph BackendCluster[Application Tier\nSpring Boot Cluster]
-        APP[Petstore Backend\nSpring Boot 3.x\nDocker Container]
-        AUTH[Auth Module\n(JWT Issuer & Session Control)]
-        INVENTORY[Inventory Module\n(Productos, Notificaciones)]
-    end
+  subgraph BackendCluster[Application Tier\nSpring Boot Cluster]
+    APP[Petstore Backend\nSpring Boot 3.x\nDocker Container]
+    AUTH[Auth Module\n(JWT Issuer & Session Control)]
+    INVENTORY[Inventory Module\n(Productos, Notificaciones)]
+  end
 
-    subgraph DataLayer[Data Tier]
-        DB[(PostgreSQL\nManaged Instance)]
-        Secrets[Secrets Manager\n(Environment Variables)]
-    end
+  subgraph DataLayer[Data Tier]
+    DB[(PostgreSQL\nManaged Instance)]
+    Secrets[Secrets Manager\n(Environment Variables)]
+  end
 
-    subgraph CI_CD[CI/CD Pipeline]
-        GH[GitHub Repository]
-        Runner[GitHub Actions Runner]
-        Registry[(Container Registry)]
-    end
+  subgraph CI_CD[CI/CD Pipeline]
+    GH[GitHub Repository]
+    Runner[GitHub Actions Runner]
+    Registry[(Container Registry)]
+  end
 
-    UI -->|HTTPS| GW
-    GW -->|JWT Auth + REST/JSON| APP
-    APP --> AUTH
-    APP --> INVENTORY
-    AUTH --> DB
-    INVENTORY --> DB
-    APP -->|Read Secrets| Secrets
+  UI -->|HTTPS| GW
+  GW -->|JWT Auth + REST/JSON| APP
+  APP --> AUTH
+  APP --> INVENTORY
+  AUTH --> DB
+  INVENTORY --> DB
+  APP -->|Read Secrets| Secrets
 
-    GH -->|Push| Runner
-    Runner -->|Build & Test (Maven)| APP
-    Runner -->|Build Image| Registry
-    Registry -->|Pull Image| BackendCluster
+  GH -->|Push| Runner
+  Runner -->|Build & Test (Maven)| APP
+  Runner -->|Build Image| Registry
+  Registry -->|Pull Image| BackendCluster
 
-    note right of APP: Port 8080\nSpring Security + JWT
-    note bottom of GW: TLS Termination\nCORS / Rate Limit
-    note bottom of Runner: Stages: build → test → package → deploy
-```
+  note right of APP: Port 8080\nSpring Security + JWT
+  note bottom of GW: TLS Termination\nCORS / Rate Limit
+  note bottom of Runner: Stages: build → test → package → deploy
 
