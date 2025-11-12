@@ -123,8 +123,11 @@
 				<version>9.2.0</version>
 				<configuration>
 					<failBuildOnCVSS>8</failBuildOnCVSS>
+					<nvdApiKey>${env.NVD_API_KEY}</nvdApiKey>
+					<nvdApiDelay>6000</nvdApiDelay>
 				</configuration>
 			</plugin>
+			
 		</plugins>
 	</build>
 
