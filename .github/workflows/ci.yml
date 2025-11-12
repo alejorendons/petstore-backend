@@ -37,10 +37,13 @@ jobs:
       - name: Lint & package
         run: mvn -B -ntp -DskipTests package
 
+      - name: Clean dependency-check cache
+        run: rm -rf ~/.m2/repository/org/owasp/dependency-check-data
+
       - name: Security scan (OWASP Dependency-Check)
         env:
           NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
-        run: mvn -B -ntp org.owasp:dependency-check-maven:check -Dnvd.api.key=${{ secrets.NVD_API_KEY }}
+        run: mvn -B -ntp org.owasp:dependency-check-maven:check -Dnvd.api.key=${{ secrets.NVD_API_KEY }} -Dnvd.api.delay=10000
 
       - name: Build Docker image
         if: hashFiles('Dockerfile') != ''

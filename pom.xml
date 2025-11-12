@@ -124,7 +124,7 @@
 				<configuration>
 					<failBuildOnCVSS>8</failBuildOnCVSS>
 					<nvdApiKey>${env.NVD_API_KEY}</nvdApiKey>
-					<nvdApiDelay>6000</nvdApiDelay>
+					<nvdApiDelay>10000</nvdApiDelay>
 				</configuration>
 			</plugin>
 			
